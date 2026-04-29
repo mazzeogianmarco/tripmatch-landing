@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripMatch — Viaggi su misura da agenzie italiane verificate</title>
+  <meta name="description" content="Racconta il viaggio che vuoi fare. 3 agenzie italiane ti rispondono entro 48 ore con proposte su misura. Inizia gratis." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy:   #1F3A5F;
+      --orange: #C9A84C;
+      --orange-hover: #b08c38;
+      --text:   #2d2d2d;
+      --text-light: #6b7280;
+      --bg:     #ffffff;
+      --bg-light: #f0f4f8;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(31,58,95,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ─────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(31,58,95,.08);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--navy);
+      text-decoration: none;
+      letter-spacing: -.02em;
+    }
+
+    .logo span { color: var(--orange); }
+
+    .nav-cta {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: .875rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s;
+    }
+
+    .nav-cta:hover { background: var(--orange-hover); }
+
+    /* ── FADE-IN SCROLL ANIMATION ────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    #hero {
+      padding: 80px 24px 88px;
+      text-align: center;
+      background: var(--bg);
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(31,58,95,.07);
+      color: var(--navy);
+      font-size: .8rem;
+      font-weight: 600;
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-bottom: 28px;
+      letter-spacing: .02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.12;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #4b5563;
+      line-height: 1.65;
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 18px 40px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s, transform .15s, box-shadow .18s;
+      box-shadow: 0 6px 24px rgba(201,168,76,.4);
+    }
+
+    .cta-btn:hover {
+      background: var(--orange-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(201,168,76,.55);
+    }
+
+    .cta-btn:active { transform: translateY(0); }
+
+    .hero-microcopy {
+      display: block;
+      margin-top: 14px;
+      font-size: .8rem;
+      color: var(--text-light);
+    }
+
+    /* ── COME FUNZIONA ───────────────────────────────── */
+    #how {
+      padding: 80px 24px;
+      background: var(--bg);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -.025em;
+      margin-bottom: 52px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: .7rem;
+      font-weight: 700;
+      color: rgba(31,58,95,.25);
+      letter-spacing: .08em;
+    }
+
+    .step-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    .step h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: .9rem;
+      color: #4b5563;
+      line-height: 1.65;
+    }
+
+    /* ── CONFRONTO ───────────────────────────────────── */
+    #compare {
+      padding: 80px 24px;
+      background: var(--bg-light);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+
+    .compare-col {
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .compare-header {
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: .95rem;
+      letter-spacing: .02em;
+    }
+
+    .compare-col.booking .compare-header {
+      background: #e5e7eb;
+      color: #6b7280;
+    }
+
+    .compare-col.tripmatch .compare-header {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .compare-body {
+      list-style: none;
+    }
+
+    .compare-body li {
+      padding: 16px 24px;
+      font-size: .9rem;
+      line-height: 1.5;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .compare-body li:last-child { border-bottom: none; }
+
+    .compare-col.booking .compare-body {
+      background: #fff;
+    }
+
+    .compare-col.booking .compare-body li { color: #6b7280; }
+
+    .compare-col.booking .compare-body li::before {
+      content: "✗";
+      color: #ef4444;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .05em;
+    }
+
+    .compare-col.tripmatch .compare-body {
+      background: rgba(31,58,95,.05);
+    }
+
+    .compare-col.tripmatch .compare-body li { color: var(--text); font-weight: 500; }
+
+    .compare-col.tripmatch .compare-body li::before {
+      content: "✓";
+      color: #22c55e;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: .05em;
+    }
+
+    /* ── TRUST ───────────────────────────────────────── */
+    #trust {
+      padding: 80px 24px;
+      background: var(--bg-light);
+    }
+
+    .trust-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .trust-inner .section-title { margin-bottom: 20px; }
+
+    .trust-badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #fff;
+      border: 1px solid rgba(31,58,95,.12);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--navy);
+      box-shadow: 0 2px 8px rgba(31,58,95,.06);
+    }
+
+    .trust-text {
+      font-size: 1rem;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+
+    /* ── CTA FINALE ──────────────────────────────────── */
+    #cta-final {
+      padding: 88px 24px;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    #cta-final .section-title {
+      color: #fff;
+      margin-bottom: 32px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: #0f2338;
+      padding: 32px 24px;
+      text-align: center;
+      color: rgba(255,255,255,.5);
+      font-size: .83rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .footer-brand {
+      color: rgba(255,255,255,.8);
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,.45);
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .footer-links a:hover { color: rgba(255,255,255,.8); }
+
+    /* ── FORM SECTION PLACEHOLDER ────────────────────── */
+    #form-section {
+      padding: 0;
+      min-height: 0;
+    }
+
+    /* ── STICKY BOTTOM CTA (solo mobile) ────────────── */
+    .mobile-cta-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      padding: 12px 16px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(31,58,95,.1);
+      box-shadow: 0 -4px 20px rgba(31,58,95,.1);
+    }
+
+    .mobile-cta-bar a {
+      display: block;
+      background: var(--orange);
+      color: #fff;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 10px;
+      padding: 16px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(201,168,76,.4);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      /* Sezioni: padding ridotto */
+      #hero    { padding: 52px 20px 140px; }
+      #how     { padding: 56px 20px; }
+      #compare { padding: 56px 20px; }
+      #trust   { padding: 56px 20px; }
+      #cta-final { padding: 64px 20px; }
+
+      nav { padding: 0 16px; }
+      .logo { font-size: 1.1rem; }
+
+      /* Steps: colonna singola */
+      .steps {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+
+      /* Step card: orizzontale su mobile */
+      .step {
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Confronto: colonna singola, TripMatch prima */
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-col.booking  { order: 2; }
+      .compare-col.tripmatch { order: 1; }
+
+      /* Bottone full-width */
+      .cta-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 18px 20px;
+        font-size: 1rem;
+      }
+
+      /* Barra sticky in basso */
+      .mobile-cta-bar { display: block; }
+
+      /* Spazio extra al fondo per non coprire contenuto */
+      footer { padding-bottom: calc(32px + 80px + env(safe-area-inset-bottom)); }
+
+      /* Trust badge: due per riga */
+      .trust-badge {
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
+      }
+
+      /* Footer link: va a capo se stretto */
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Nascondo la nav CTA perché c'è già la barra sticky */
+      .nav-cta { display: none; }
+
+      h1 { letter-spacing: -.02em; }
+
+      .hero-badge { font-size: .75rem; }
+
+      .compare-body li { padding: 14px 16px; font-size: .85rem; }
+      .compare-header   { padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="#">Trip<span>Match</span></a>
+      <a class="nav-cta" href="https://tally.so/r/7RJGJP" target="_blank" rel="noopener">Inizia ora</a>
+    </div>
+  </nav>
+
+  <!-- 1. HERO -->
+  <section id="hero">
+    <div class="hero-inner fade-in">
+      <div class="hero-badge">✈ Marketplace italiano di viaggi su misura</div>
+      <h1>Smetti di perdere<br>ore su <em>Booking.</em></h1>
+      <p class="hero-sub">
+        Racconta il viaggio che vuoi fare. 3 agenzie italiane verificate
+        ti rispondono entro 48 ore con proposte costruite su misura.
+      </p>
+      <a class="cta-btn" href="https://tally.so/r/7RJGJP" target="_blank" rel="noopener">Inizia ora — è gratuito</a>
+      <span class="hero-microcopy">Niente account. Nessuna carta di credito. Solo la tua richiesta.</span>
+    </div>
+  </section>
+
+  <!-- 2. COME FUNZIONA -->
+  <section id="how">
+    <h2 class="section-title fade-in">Come funziona</h2>
+    <div class="steps">
+      <div class="step fade-in">
+        <span class="step-number">01</span>
+        <div class="step-icon">💬</div>
+        <h3>Racconta il tuo viaggio</h3>
+        <p>Descrivi dove vuoi andare, con chi, quando e cosa cerchi. Bastano 2 minuti.</p>
+      </div>
+      <div class="step fade-in">
+        <span class="step-number">02</span>
+        <div class="step-icon">🤝</div>
+        <h3>3 agenzie lavorano per te</h3>
+        <p>Selezioniamo 3 agenzie italiane verificate specializzate sulla tua destinazione. Costruiscono proposte su misura.</p>
+      </div>
+      <div class="step fade-in">
+        <span class="step-number">03</span>
+        <div class="step-icon">✈️</div>
+        <h3>Scegli e parti</h3>
+        <p>In meno di 48 ore ricevi 3 proposte complete (volo, hotel, attività) con prezzo finale. Confronta e scegli.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CONFRONTO -->
+  <section id="compare">
+    <h2 class="section-title fade-in">Perché non Booking?</h2>
+    <div class="compare-grid fade-in">
+
+      <div class="compare-col booking">
+        <div class="compare-header">Booking</div>
+        <ul class="compare-body">
+          <li>Ti dà 1.000 hotel e ti lascia da solo</li>
+          <li>Confronta solo prezzi</li>
+          <li>Ti scarica al check-in</li>
+        </ul>
+      </div>
+
+      <div class="compare-col tripmatch">
+        <div class="compare-header">TripMatch ✦</div>
+        <ul class="compare-body">
+          <li>Ti dà 3 proposte costruite da chi conosce la destinazione</li>
+          <li>Fa confrontare le agenzie su qualità, esperienza e prezzo</li>
+          <li>Ti dà un'agenzia che risponde anche durante il viaggio</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. TRUST -->
+  <section id="trust">
+    <div class="trust-inner fade-in">
+      <h2 class="section-title">Solo agenzie italiane verificate</h2>
+      <p class="trust-text">
+        Lavoriamo solo con agenzie di viaggio italiane regolarmente autorizzate.
+        Ogni agenzia è verificata, ha licenze in regola e risponde della qualità
+        del viaggio. Niente intermediari fantasma o piattaforme straniere.
+      </p>
+      <div class="trust-badge-row">
+        <span class="trust-badge">🇮🇹 Agenzie italiane</span>
+        <span class="trust-badge">✅ Licenze verificate</span>
+        <span class="trust-badge">🔒 Nessun intermediario</span>
+        <span class="trust-badge">⚡ Risposta in 48 h</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CTA FINALE -->
+  <section id="cta-final">
+    <h2 class="section-title fade-in">Pronto a smettere di organizzare da solo?</h2>
+    <a class="cta-btn fade-in" href="https://tally.so/r/7RJGJP" target="_blank" rel="noopener">Inizia ora — è gratuito</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-brand">TripMatch — Marketplace italiano di viaggi su misura</span>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Contatti</a>
+        <a href="mailto:hello@tripmatchapp.com">hello@tripmatchapp.com</a>
+      </div>
+      <span>© 2024 TripMatch. Tutti i diritti riservati.</span>
+    </div>
+  </footer>
+
+  <!-- FORM SECTION PLACEHOLDER -->
+  <section id="form-section"></section>
+
+  <!-- STICKY BOTTOM CTA (visibile solo su mobile) -->
+  <div class="mobile-cta-bar">
+    <a href="https://tally.so/r/7RJGJP" target="_blank" rel="noopener">Inizia ora — è gratuito</a>
+  </div>
+
+  <script>
+    // Fade-in on scroll using IntersectionObserver
+    const fadeEls = document.querySelectorAll('.fade-in');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    fadeEls.forEach((el) => observer.observe(el));
+
+    // Stagger step cards
+    document.querySelectorAll('.step.fade-in').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.12}s`;
+    });
+  </script>
+
+</body>
+</html>
